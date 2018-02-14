@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kubernetes-multipod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kubernetes-multipod
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: kubernetes-multipod
+    spec:
+      containers:
+      - name: kubernetes-multipod
+        image: serdard/kubernetes-multipod:v1
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+          # If your cluster config does not include a dns service, then to
+          # instead access environment variables to find service host
+          # info, comment out the 'value: dns' line above, and uncomment the
+          # line below:
+          #value: env
+        ports:
+        - containerPort: 8080
