@@ -107,10 +107,23 @@ $> kubectl scale deployments/kubernetes-multipod --replicas=4
 
 Simple run the following command to do the rolling update
 ```bash
-$>kubectl set image deployments/kubernetes-multipod kubernetes-multipod=serdard/kubernetes-multipod:v2
+$> kubectl set image deployments/kubernetes-multipod kubernetes-multipod=serdard/kubernetes-multipod:v2
 ```
 The pods will be created and terminated one by one, because
 `.spec.strategy.rollingUpdate.maxSurge` is set to 1 on [deployment.yaml](kubernetes/deployment.yaml) file
+
+You can checkout rollout status with the following command:
+```bash
+$> kubectl rollout status deployment kubernetes-multipod
+deployment "kubernetes-multipod" successfully rolled out
+```
+
+If, for any reason, you want to rollback the update, you can run the following
+command
+```bash
+$> kubectl rollout undo deployment kubernetes-multipod
+deployment "kubernetes-multipod" rolled back
+```
 
 ## Cleanup
 
