@@ -1,14 +1,20 @@
 ## Connecting Frontend to Backend Services
 
-In this example, two apps are built in docker and deployed on Minikube.
+This is a sample project deploying a frontend and backend applications on
+kubernetes with a stateless redis DB backend.
+
+There are two apps that are deployed on Minikube in this project:
 
 frontend app is a dummy proxy. It's originated from nginx and proxies all the
 traffic to the backend service.
 
-backend app is the same app with [k8s-multipod](../k8s-multipod) It's a simple
-go application that prints several information about the pods it's running on.
+backend app is the same app with [k8s-multipod](../k8s-multipod) with some small
+modifications. It's a simple go application that prints several information about the pods it's running on.
 
-With go-app v3, redis DB backend has been implemented.
+With version 3, redis DB backend has been implemented.
+
+Deployment and Service templates are written in [backend.yaml](backend.yaml),
+[frontend.yaml](frontend.yaml) and [redis.yaml](redis.yaml) files.
 
 ### Building the docker images
 
@@ -19,17 +25,23 @@ first:
 $> eval $(minikube docker-env)
 ```
 So that minikube can build those images in its' local registry and reach them
-for deployment purposes. 
+for deployment purposes.
+
+If you're already logged in to docker hub, you can tag and push the image to
+docker registry. Check docker building, tagging and pushing to docker registry
+part of the [k8s-multipod README.md](../k8s-multipod/README.md#docker-building-tagging-and-pushing-to-the-docker-registry).
 
 #### frontend
 
 ```
+$> eval $(minikube docker-env) # If you haven't written minikube docker-env command yet
 $> cd frontend
 $> docker build -t dummyproxy:v1 .
 ```
 #### backend
 
 ```
+$> eval $(minikube docker-env) # If you haven't written minikube docker-env command yet
 $> cd backend
 $> docker build -t go-app:v3 .
 ```
@@ -45,6 +57,48 @@ $> kubectl apply -f redis.yaml
 $> kubectl apply -f backend.yaml
 $> kubectl apply -f frontend.yaml
 ```
+
+### Testing the App
+
+When you deploy all three parts of the system (redis, backend and frontend), you
+can curl the frontend service url
+
+```
+$> curl $(minikube service --url frontend)/health_check
+{"alive": true, "redis_conn": "good"}
+```
+```
+$> curl $(minikube service --url frontend)
+Hello from Kubernetes! Running on go-app-548654c765-vzxbb | version: 0.3
+Total number of requests to this pod:4
+Total number of requests in all system:7
+App Uptime: 27m42.059174051s
+Log Time: 2018-04-30 04:15:22.600948094 +0000 UTC m=+1662.061687640
+```
+
+For more details about the app, check [Backend README.md](backend/README.md).
+
+### Cleanup
+```
+$> kubectl delete -f frontend.yaml
+$> kubectl delete -f backend.yaml
+$> kubectl delete -f redis.yaml
+```
+
+### TODO List
+- [ ] Serve the API through SSL (check nginx ingress)
+- [ ] Instead of a stateless DB configuration, check StatefulSet for Redis
+  high availability and resilience
+  - [ ] Separate PV
+  - [ ] redis-slave pods and redis-sentinel for master election?
+- [ ] Use [Horizontal Pod
+  Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
+  for auto scaling the frontend and backend apps
+- [ ] Automate the cluster setup (Makefile and/or terraform files would be quite
+  handy)
+- [ ] Deploy all the apps to a specific namespace that can be configured to be used
+  on different environments.
+- [ ] Write smoke tests for the deployment
 
 #### References:
 * [Connect a Front End to a Back End Using a Service](https://kubernetes.io/docs/tasks/access-application-cluster/connecting-frontend-backend/)

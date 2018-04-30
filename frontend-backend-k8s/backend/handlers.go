@@ -18,7 +18,7 @@ func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
 
 	err := Ping()
 	if err != nil {
-		buffer.WriteString(`"redis_conn": "shit"}`)
+		buffer.WriteString(`"redis_conn": "problematic"}`)
 		fmt.Printf("err = %+v\n", err)
 	} else {
 		buffer.WriteString(`"redis_conn": "good"}`)
@@ -40,12 +40,6 @@ func printHandler(w http.ResponseWriter, r *http.Request) {
 	buffer.WriteString(" | version: ")
 	buffer.WriteString(VERSION)
 
-	ok, err := Exists("requests")
-	if ok {
-		buffer.WriteString("\nRequests exists on redis\n")
-	} else {
-		buffer.WriteString("\nRedis integration is not implemented\n")
-	}
 	if r.URL.Path != "/favicon.ico" {
 		Requests++
 		req_num, _ = Incrby("requests", 1)
