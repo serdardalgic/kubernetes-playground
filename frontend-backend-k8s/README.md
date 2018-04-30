@@ -16,6 +16,24 @@ With version 3, redis DB backend has been implemented.
 Deployment and Service templates are written in [backend.yaml](backend.yaml),
 [frontend.yaml](frontend.yaml) and [redis.yaml](redis.yaml) files.
 
+### Prerequisites:
+* Make sure that your minikube is up and running, and the kubectl is correctly
+  configured to point minikube:
+```
+$> minikube status:
+minikube: Running
+cluster: Running
+kubectl: Correctly Configured: pointing to minikube-vm at 192.168.99.100
+```
+* Current version is tested on minikube v0.26.1 and kubernetes v1.10.1. There are
+  various Workloads API changes in Kubernetes v1.8 and 1.9, this project uses
+  the latest API specifications. See [Reference Documentation](https://kubernetes.io/docs/reference/workloads-18-19/) for details of the API change.
+
+* Backend app requires a multi-stage build, which comes with Docker 17.05 and
+  higher versions. If you have the latest minikube, it should be alright. But in
+  case you see any problem, check out the [docker documentation on multi-stage
+  builds](https://docs.docker.com/develop/develop-images/multistage-build/)
+
 ### Building the docker images
 
 If you're not going to push those docker images to docker hub, and just want
