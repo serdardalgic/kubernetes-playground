@@ -18,7 +18,7 @@ first:
 ```
 $> eval $(minikube docker-env)
 ```
-So that minikube can build those images in it's local registry and reach them
+So that minikube can build those images in its' local registry and reach them
 for deployment purposes. 
 
 #### frontend
@@ -31,7 +31,7 @@ $> docker build -t dummyproxy:v1 .
 
 ```
 $> cd backend
-$> docker build -t go-app:v1 .
+$> docker build -t go-app:v3 .
 ```
 
 The names of the docker images are important. If you prefer to name them
