@@ -4,7 +4,7 @@ A small app showing various info about the server.
 
 Currently, there are two endpoints in the API:
 
-### /health_check endpoint:
+### "/health_check" endpoint:
 
 Gives info about the server and the redis connection:
 
@@ -15,7 +15,7 @@ $> curl $(SERVICE_IP)/health_check
 
 The return value is a JSON dictionary with `alive` and `redis_conn` keys.
 
-### / endpoint:
+### "/" endpoint:
 
 Prints the hostname of the machine, version of the program, Total # of requests on
 this pod, Total # of requests in the whole system, App Uptime and Log Time.
@@ -29,7 +29,7 @@ Log Time: 2018-04-30 06:06:21.856840565 +0200 CEST m=+2.165491052
 ```
 Number of requests are counted by hits on only this (`/`) endpoint.
 
-#### TODO List
+#### TODO List
 - [ ] Write Tests
 - [ ] Add more endpoints.
 - [ ] "/" endpoint doesn't return JSON, it breaks the API structure. Fix it.
