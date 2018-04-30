@@ -8,6 +8,8 @@ traffic to the backend service.
 backend app is the same app with [k8s-multipod](../k8s-multipod) It's a simple
 go application that prints several information about the pods it's running on.
 
+With go-app v3, redis DB backend has been implemented.
+
 ### Building the docker images
 
 If you're not going to push those docker images to docker hub, and just want
@@ -39,6 +41,7 @@ in Deployment descriptions.
 ### Deploying on Kubernetes
 
 ```
+$> kubectl apply -f redis.yaml
 $> kubectl apply -f backend.yaml
 $> kubectl apply -f frontend.yaml
 ```
