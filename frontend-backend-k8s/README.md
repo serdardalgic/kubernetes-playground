@@ -118,5 +118,22 @@ $> kubectl delete -f redis.yaml
   on different environments.
 - [ ] Write smoke tests for the deployment
 
+#### Notes:
+
+frontend Service is of type `LoadBalancer`, however, as there is no external
+Load Balancer created in local environment, frontend LoadBalancer service will
+be in `<pending>` state for External-IP
+```
+$> kubectl get services
+NAME           TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+frontend       LoadBalancer   10.99.20.153    <pending>     80:32695/TCP   2h
+go-app         ClusterIP      10.103.117.39   <none>        80/TCP         2h
+kubernetes     ClusterIP      10.96.0.1       <none>        443/TCP        2h
+redis-master   ClusterIP      10.110.233.7    <none>        6379/TCP       2h
+```
+You don't need to wait for it, the `<pending>` state will not change. As
+LoadBalancer services get a node port assigned too, the `minikube service --url
+frontend` command will return the service URL. Reference [here](https://github.com/kubernetes/minikube/issues/384#issuecomment-234409957)
+
 #### References:
 * [Connect a Front End to a Back End Using a Service](https://kubernetes.io/docs/tasks/access-application-cluster/connecting-frontend-backend/)
