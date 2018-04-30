@@ -105,6 +105,7 @@ $> kubectl delete -f redis.yaml
 
 ### TODO List
 - [ ] Serve the API through SSL (check nginx ingress)
+- [ ] Authentication, Authorization
 - [ ] Instead of a stateless DB configuration, check StatefulSet for Redis
   high availability and resilience
   - [ ] Separate PV
