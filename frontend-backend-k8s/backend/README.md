@@ -1,4 +1,4 @@
-# Mini Hello from Kubernetes App and API
+# Mini Hello from Kubernetes App and API
 
 A small app showing various info about the server. 
 
