@@ -45,7 +45,7 @@ info:
 build: build-fe build-be
 
 ## Builds frontend image
-build-fe:
+build-fe: 
 	$(eval FE_IMAGE := $(shell eval $$(minikube docker-env) ;\
 		docker images -q $(FE_APPNAME):$(FE_VERSION) 2> /dev/null))
 	@if [ -z $(FE_IMAGE) ]; then \
@@ -61,7 +61,7 @@ build-fe:
 
 
 ## Builds backend image
-build-be:
+build-be: 
 	$(eval BE_IMAGE := $(shell eval $$(minikube docker-env) ;\
 		docker images -q $(BE_APPNAME):$(BE_VERSION) 2> /dev/null))
 	@if [ -z $(BE_IMAGE) ]; then \
@@ -128,7 +128,7 @@ help:
 	@ echo ''
 	@ echo '  Targets:'
 	@ echo ''
-	@ awk '/^##/{ comment = substr($$0,3) } comment && /^[a-zA-Z][a-zA-Z0-9_-]+ ?:/{ print "   ", $$1, comment }' $(MAKEFILE_LIST) | column -t -s ':' | sort
+	@ awk '/^##/{ comment = substr($$0,3) } comment && /^[a-zA-Z][a-zA-Z0-9_-]+ ?:[^=]/{ print "   ", $$1, comment }' $(MAKEFILE_LIST) | column -t -s ':' | sort
 	@ echo ''
 	@ echo '  Flags:'
 	@ echo ''
