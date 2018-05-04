@@ -1,16 +1,21 @@
 SHELL = /bin/bash -o pipefail
 
+## Frontend App Name (default: dummyproxy)
 FE_APPNAME ?= dummyproxy
+## Frontend App Version (default: v1)
 FE_VERSION ?= v1
 
+## Backend App Name (default: go-app)
 BE_APPNAME ?= go-app
+## Backend App Version (default: v3)
 BE_VERSION ?= v3
 
-## Programs that should be installed
-PREREQUISITES := kubectl minikube
+## Programs that should be installed (default: kubectl and minikube)
+PREREQUISITES = kubectl minikube
 $(foreach prg, $(PREREQUISITES), \
 	$(if $(shell type $(prg) 2> /dev/null), , $(error $(prg) must be installed)))
 
+## Default parameter, prints the help message
 all: deploy
 
 ## Prints info about the project
@@ -65,9 +70,10 @@ deploy: build
 	kubectl apply -f kubernetes/backend.yaml
 	kubectl apply -f kubernetes/frontend.yaml
 
+## Tests the system
 test: ; # TODO: Test the system
 
-## Deletes all the project resources from local minikube
+## Deletes all the project resources
 clean:
 	@echo
 	@echo Deleting ...
@@ -76,5 +82,21 @@ clean:
 	kubectl delete -f kubernetes/backend.yaml
 	kubectl delete -f kubernetes/redis.yaml
 
+# Taken from https://github.com/ianstormtaylor/makefile-help
+## Show this help prompt.
+help:
+	@ echo
+	@ echo '  Usage:'
+	@ echo ''
+	@ echo '    make <target> [flags...]'
+	@ echo ''
+	@ echo '  Targets:'
+	@ echo ''
+	@ awk '/^##/{ comment = substr($$0,3) } comment && /^[a-zA-Z][a-zA-Z0-9_-]+ ?:/{ print "   ", $$1, comment }' $(MAKEFILE_LIST) | column -t -s ':' | sort
+	@ echo ''
+	@ echo '  Flags:'
+	@ echo ''
+	@ awk '/^##/{ comment = substr($$0,3) } comment && /^[a-zA-Z][a-zA-Z0-9_-]+ ?(\?)*=/{ print "   ", $$1, $$2, comment }' $(MAKEFILE_LIST) | column -t -s '?=' | sort
+	@ echo ''
 
-.PHONY: clean test info
+.PHONY: clean test info help
