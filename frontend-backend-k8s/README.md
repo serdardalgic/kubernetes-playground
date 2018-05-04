@@ -35,9 +35,18 @@ kubectl: Correctly Configured: pointing to minikube-vm at 192.168.99.100
   builds](https://docs.docker.com/develop/develop-images/multistage-build/)
 
 ### For the impatient:
-`make` command will build the images and deploy the project to your minikube VM.
+* `make deploy` command will build the images and deploy the project to your minikube VM.
+```
+$> make deploy
+```
+
+* To get more info about make targets and flags
 ```
 $> make
+```
+or
+```
+$> make help
 ```
 
 ### Building the docker images
