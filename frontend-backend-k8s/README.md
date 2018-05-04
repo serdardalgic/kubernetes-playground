@@ -34,46 +34,49 @@ kubectl: Correctly Configured: pointing to minikube-vm at 192.168.99.100
   case you see any problem, check out the [docker documentation on multi-stage
   builds](https://docs.docker.com/develop/develop-images/multistage-build/)
 
+### For the impatient:
+`make` command will build the images and deploy the project to your minikube VM.
+```
+$> make
+```
+
 ### Building the docker images
 
-If you're not going to push those docker images to docker hub, and just want
-Minikube VM to reach those images, run the following command on your terminal
-first:
 ```
-$> eval $(minikube docker-env)
+$> make build
 ```
-So that minikube can build those images in its' local registry and reach them
-for deployment purposes.
-
-If you're already logged in to docker hub, you can tag and push the image to
-docker registry. Check docker building, tagging and pushing to docker registry
-part of the [k8s-multipod README.md](../k8s-multipod/README.md#docker-building-tagging-and-pushing-to-the-docker-registry).
+This command builds both frontend and backend apps' images.
 
 #### frontend
 
 ```
-$> eval $(minikube docker-env) # If you haven't written minikube docker-env command yet
-$> cd frontend
-$> docker build -t dummyproxy:v1 .
+$> make build-fe
 ```
+If you want to change the name or the version of the frontend app
+```
+$> FE_APPNAME=<new_name> FE_VERSION=<new_version> make build-fe
+```
+When you change the name and/or version of the app, do not forget to update `template.spec.containers.image` value in Deployment descriptions.
+
 #### backend
 
 ```
-$> eval $(minikube docker-env) # If you haven't written minikube docker-env command yet
-$> cd backend
-$> docker build -t go-app:v3 .
+$> make build-be
 ```
-
-The names of the docker images are important. If you prefer to name them
-differently, do not forget to rename the `template.spec.containers.image` value
-in Deployment descriptions.
+If you want to change the name or the version of the frontend app
+```
+$> BE_APPNAME=<new_name> BE_VERSION=<new_version> make build-be
+```
+When you change the name and/or version of the app, do not forget to update `template.spec.containers.image` value in Deployment descriptions.
 
 ### Deploying on Kubernetes
 
 ```
-$> kubectl apply -f redis.yaml
-$> kubectl apply -f backend.yaml
-$> kubectl apply -f frontend.yaml
+$> make
+```
+or
+```
+$> make deploy
 ```
 
 ### Testing the App
@@ -113,7 +116,7 @@ $> kubectl delete -f redis.yaml
 - [ ] Use [Horizontal Pod
   Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
   for auto scaling the frontend and backend apps
-- [ ] Automate the cluster setup (Makefile and/or terraform files would be quite
+- [*] Automate the cluster setup (Makefile and/or terraform files would be quite
   handy)
 - [ ] Deploy all the apps to a specific namespace that can be configured to be used
   on different environments.
