@@ -76,13 +76,15 @@ build-be:
 	fi
 
 ## Deploys on kubernetes
-deploy: build namespace
+deploy: build namespace create-hpa-yaml
 	@echo
 	@echo Deploying ...
 	@echo
 	kubectl apply --record -f kubernetes/redis.yaml
 	kubectl apply --record -f kubernetes/backend.yaml
 	kubectl apply --record -f kubernetes/frontend.yaml
+	kubectl apply --record -f kubernetes/$(NAMESPACE)-frontend-hpa.yaml
+	kubectl apply --record -f kubernetes/$(NAMESPACE)-backend-hpa.yaml
 
 ## Creates the namespace yaml file
 create-namespace-yaml: kubernetes/fe-be-namespace.yaml.tmpl
@@ -90,6 +92,23 @@ create-namespace-yaml: kubernetes/fe-be-namespace.yaml.tmpl
 	@echo Generating kubernetes/$(NAMESPACE)-namespace.yaml ...
 	@echo
 	@envsubst < $< > kubernetes/$(NAMESPACE)-namespace.yaml
+
+## Creates Horizontal Pod Autoscaling yaml files for frontend and backend
+create-hpa-yaml: create-frontend-hpa.yaml create-backend-hpa.yaml
+
+## Creates HPA yaml file for frontend
+create-frontend-hpa.yaml: kubernetes/frontend-hpa.yaml.tmpl
+	@echo
+	@echo Generating kubernetes/$(NAMESPACE)-frontend-hpa.yaml ...
+	@echo
+	@envsubst < $< > kubernetes/$(NAMESPACE)-frontend-hpa.yaml
+
+## Creates HPA yaml file for backend
+create-backend-hpa.yaml: kubernetes/backend-hpa.yaml.tmpl
+	@echo
+	@echo Generating kubernetes/$(NAMESPACE)-backend-hpa.yaml ...
+	@echo
+	@envsubst < $< > kubernetes/$(NAMESPACE)-backend-hpa.yaml
 
 ## Creates the namespace in the cluster, switches context
 namespace: create-namespace-yaml
@@ -113,6 +132,8 @@ clean:
 	kubectl delete -f kubernetes/frontend.yaml || true
 	kubectl delete -f kubernetes/backend.yaml || true
 	kubectl delete -f kubernetes/redis.yaml || true
+	kubectl delete -f kubernetes/$(NAMESPACE)-frontend-hpa.yaml || true
+	kubectl delete -f kubernetes/$(NAMESPACE)-backend-hpa.yaml || true
 	kubectl delete -f kubernetes/$(NAMESPACE)-namespace.yaml || true
 	@echo 
 	@kubectl config use-context minikube
