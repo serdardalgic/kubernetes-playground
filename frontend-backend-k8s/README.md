@@ -116,7 +116,7 @@ $> kubectl delete -f redis.yaml
 - [ ] Use [Horizontal Pod
   Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
   for auto scaling the frontend and backend apps
-- [*] Automate the cluster setup (Makefile and/or terraform files would be quite
+- [x] Automate the cluster setup (Makefile and/or terraform files would be quite
   handy)
 - [ ] Deploy all the apps to a specific namespace that can be configured to be used
   on different environments.
