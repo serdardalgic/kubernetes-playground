@@ -40,7 +40,7 @@ kubectl: Correctly Configured: pointing to minikube-vm at 192.168.99.100
 $> make deploy
 ```
 
-* To get more info about make targets and flags
+* To get detailed info about make targets and flags
 ```
 $> make
 ```
@@ -80,6 +80,10 @@ When you change the name and/or version of the app, do not forget to update `tem
 
 ### Deploying on Kubernetes
 
+Before deploying the project, a namespace and a context for the project is
+created (default: NAMESPACE=fe-be-dev, CTX=dev). And kubectl starts using the
+new context. 
+
 ```
 $> make
 ```
@@ -94,11 +98,11 @@ When you deploy all three parts of the system (redis, backend and frontend), you
 can curl the frontend service url
 
 ```
-$> curl $(minikube service --url frontend)/health_check
+$> curl $(minikube service -n <namespace> --url frontend)/health_check
 {"alive": true, "redis_conn": "good"}
 ```
 ```
-$> curl $(minikube service --url frontend)
+$> curl $(minikube service -n <namespace> --url frontend)
 Hello from Kubernetes! Running on go-app-548654c765-vzxbb | version: 0.3
 Total number of requests to this pod:4
 Total number of requests in all system:7
@@ -110,10 +114,9 @@ For more details about the app, check [Backend README.md](backend/README.md).
 
 ### Cleanup
 ```
-$> kubectl delete -f frontend.yaml
-$> kubectl delete -f backend.yaml
-$> kubectl delete -f redis.yaml
+$> make clean
 ```
+It will remove all the resources that have been created on your minikube.
 
 ### TODO List
 - [ ] Serve the API through SSL (check nginx ingress)
@@ -127,7 +130,7 @@ $> kubectl delete -f redis.yaml
   for auto scaling the frontend and backend apps
 - [x] Automate the cluster setup (Makefile and/or terraform files would be quite
   handy)
-- [ ] Deploy all the apps to a specific namespace that can be configured to be used
+- [x] Deploy all the apps to a specific namespace that can be configured to be used
   on different environments.
 - [ ] Write smoke tests for the deployment
 
