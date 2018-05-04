@@ -80,9 +80,9 @@ deploy: build namespace
 	@echo
 	@echo Deploying ...
 	@echo
-	kubectl apply -f kubernetes/redis.yaml
-	kubectl apply -f kubernetes/backend.yaml
-	kubectl apply -f kubernetes/frontend.yaml
+	kubectl apply --record -f kubernetes/redis.yaml
+	kubectl apply --record -f kubernetes/backend.yaml
+	kubectl apply --record -f kubernetes/frontend.yaml
 
 ## Creates the namespace yaml file
 create-namespace-yaml: kubernetes/fe-be-namespace.yaml.tmpl
@@ -96,7 +96,7 @@ namespace: create-namespace-yaml
 	@echo
 	@echo Creating namespace ...
 	@echo
-	@kubectl apply -f kubernetes/$(NAMESPACE)-namespace.yaml
+	@kubectl apply -f --record kubernetes/$(NAMESPACE)-namespace.yaml
 	@kubectl config set-context $(CTX) --namespace=$(NAMESPACE) \
 		--cluster minikube \
 		--user minikube
