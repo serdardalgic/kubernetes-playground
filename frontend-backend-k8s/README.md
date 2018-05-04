@@ -13,10 +13,10 @@ modifications. It's a simple go application that prints several information abou
 
 With version 3, redis DB backend has been implemented.
 
-Deployment and Service templates are written in [backend.yaml](backend.yaml),
-[frontend.yaml](frontend.yaml) and [redis.yaml](redis.yaml) files.
+Deployment and Service yaml files are under [kubernetes](kubernetes) directory.
 
 ### Prerequisites:
+* minikube and kubectl should be installed on your system.
 * Make sure that your minikube is up and running, and the kubectl is correctly
   configured to point minikube:
 ```
