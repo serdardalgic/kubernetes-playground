@@ -121,9 +121,13 @@ It will remove all the resources that have been created on your minikube.
   high availability and resilience
   - [ ] Separate PV
   - [ ] redis-slave pods and redis-sentinel for master election?
-- [ ] Use [Horizontal Pod
+- [x] ~~Use [Horizontal Pod
   Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
-  for auto scaling the frontend and backend apps
+  for auto scaling the frontend and backend apps~~ There is a problem with k8s
+  versions >1.9.0 that the kube-controller-manager should be started with
+  different parameters (`--horizontal-pod-autoscaler-use-rest-clients=false`)
+  and it's not possible to fix it with the current minikube version. See kubernetes/kubernetes#57673 for details. An option
+  would be using a different version of kubernetes till the issue is fixed.
 - [x] Automate the cluster setup (Makefile and/or terraform files would be quite
   handy)
 - [x] Deploy all the apps to a specific namespace that can be configured to be used
