@@ -1,4 +1,4 @@
-SHELL = /bin/bash -x -o pipefail
+SHELL = /bin/bash -o pipefail
 
 ## Frontend App Name (default: dummyproxy)
 FE_APPNAME ?= dummyproxy
