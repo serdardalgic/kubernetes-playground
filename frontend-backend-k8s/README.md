@@ -19,7 +19,7 @@ Deployment and Service yaml files are under [kubernetes](kubernetes) directory.
 * minikube and kubectl should be installed on your system.
 * Make sure that your minikube is up and running, and the kubectl is correctly
   configured to point minikube:
-```
+```sh
 $> minikube status:
 minikube: Running
 cluster: Running
@@ -36,44 +36,40 @@ kubectl: Correctly Configured: pointing to minikube-vm at 192.168.99.100
 
 ### For the impatient:
 * `make deploy` command will build the images and deploy the project to your minikube VM.
-```
+```sh
 $> make deploy
 ```
 
 * To get detailed info about make targets and flags
-```
-$> make
-```
-or
-```
+```sh
 $> make help
 ```
 
 ### Building the docker images
 
-```
+```sh
 $> make build
 ```
 This command builds both frontend and backend apps' images.
 
 #### frontend
 
-```
+```sh
 $> make build-fe
 ```
 If you want to change the name or the version of the frontend app
-```
+```sh
 $> FE_APPNAME=<new_name> FE_VERSION=<new_version> make build-fe
 ```
 When you change the name and/or version of the app, do not forget to update `template.spec.containers.image` value in Deployment descriptions.
 
 #### backend
 
-```
+```sh
 $> make build-be
 ```
 If you want to change the name or the version of the frontend app
-```
+```sh
 $> BE_APPNAME=<new_name> BE_VERSION=<new_version> make build-be
 ```
 When you change the name and/or version of the app, do not forget to update `template.spec.containers.image` value in Deployment descriptions.
@@ -84,11 +80,11 @@ Before deploying the project, a namespace and a context for the project is
 created (default: NAMESPACE=fe-be-dev, CTX=dev). And kubectl starts using the
 new context. 
 
-```
+```sh
 $> make
 ```
 or
-```
+```sh
 $> make deploy
 ```
 
@@ -97,11 +93,11 @@ $> make deploy
 When you deploy all three parts of the system (redis, backend and frontend), you
 can curl the frontend service url
 
-```
+```sh
 $> curl $(minikube service -n <namespace> --url frontend)/health_check
 {"alive": true, "redis_conn": "good"}
 ```
-```
+```sh
 $> curl $(minikube service -n <namespace> --url frontend)
 Hello from Kubernetes! Running on go-app-548654c765-vzxbb | version: 0.3
 Total number of requests to this pod:4
@@ -113,7 +109,7 @@ Log Time: 2018-04-30 04:15:22.600948094 +0000 UTC m=+1662.061687640
 For more details about the app, check [Backend README.md](backend/README.md).
 
 ### Cleanup
-```
+```sh
 $> make clean
 ```
 It will remove all the resources that have been created on your minikube.
@@ -139,7 +135,7 @@ It will remove all the resources that have been created on your minikube.
 frontend Service is of type `LoadBalancer`, however, as there is no external
 Load Balancer created in local environment, frontend LoadBalancer service will
 be in `<pending>` state for External-IP
-```
+```sh
 $> kubectl get services
 NAME           TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
 frontend       LoadBalancer   10.99.20.153    <pending>     80:32695/TCP   2h
