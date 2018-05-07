@@ -126,7 +126,7 @@ It will remove all the resources that have been created on your minikube.
   for auto scaling the frontend and backend apps~~ There is a problem with k8s
   versions >1.9.0 that the kube-controller-manager should be started with
   different parameters (`--horizontal-pod-autoscaler-use-rest-clients=false`)
-  and it's not possible to fix it with the current minikube version. See kubernetes/kubernetes#57673 for details. An option
+  and it's not possible to fix it with the current minikube version. See https://github.com/kubernetes/kubernetes/issues/57673 for details. An option
   would be using a different version of kubernetes till the issue is fixed.
 - [x] Automate the cluster setup (Makefile and/or terraform files would be quite
   handy)
