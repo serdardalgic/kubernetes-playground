@@ -1,4 +1,4 @@
-SHELL = /bin/bash -o pipefail
+SHELL = /bin/bash -x -o pipefail
 
 ## Frontend App Name (default: dummyproxy)
 FE_APPNAME ?= dummyproxy
@@ -96,7 +96,7 @@ namespace: create-namespace-yaml
 	@echo
 	@echo Creating namespace ...
 	@echo
-	@kubectl apply -f --record kubernetes/$(NAMESPACE)-namespace.yaml
+	@kubectl apply --record -f kubernetes/$(NAMESPACE)-namespace.yaml
 	@kubectl config set-context $(CTX) --namespace=$(NAMESPACE) \
 		--cluster minikube \
 		--user minikube
