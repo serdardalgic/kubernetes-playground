@@ -69,7 +69,7 @@ build-be:
 		echo Building Backend Image: $(BE_APPNAME):$(BE_VERSION) ;\
 		echo ;\
 		eval $$(minikube docker-env) ;\
-		cd frontend ;\
+		cd backend ;\
 		docker build --no-cache -t $(BE_APPNAME):$(BE_VERSION) . ;\
 	else \
 		echo "Backend image $(BE_APPNAME):$(BE_VERSION) is present in the local docker registry." ;\
